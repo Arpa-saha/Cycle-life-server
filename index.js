@@ -9,7 +9,7 @@ app.use(cors())    //middleware
 app.use(bodyParser.json())  //middleware
 //file upload
 const fileUpload = require('express-fileupload');
-app.use(express.static('doctors'));   //doctors name folder create hbe jekhane upload kora pic gulu takhbe
+app.use(express.static('doctors'));   
 app.use(fileUpload());
 const MongoClient = require('mongodb').MongoClient;
 
@@ -40,17 +40,16 @@ client.connect(err => {
         console.log(price, title, description, file);
 
 
-        // uploadPath = __dirname + '/doctors' + file.name;
         const filePath = `${__dirname}/doctors/${file.name}`
         file.mv(filePath, (err) => {
             if (err) {
                 res.status(500).send({ msg: "failed to upload" });
             }
-            // res.status(200).send({ name: file.name });
+         
         });
 
         const newImg = file.data;
-        // const newImg = fs.readFileSync(filePath)
+   
         const encImg = newImg.toString('base64');
         var image = {
             contentType: file.mimetype,
@@ -106,7 +105,7 @@ client.connect(err => {
         BookCollection.insertOne(book)
             .then(result => {
 
-                // console.log(result.insertedCount);
+               
                 console.log(result);
                 res.send(result.insertedCount > 0)
             })
@@ -129,22 +128,6 @@ client.connect(err => {
             })
 
     })
-
-    // app.patch('/update/:id', (req, res) => {
-    //     console.log(req.body.update);
-    //     BookCollection.updateOne(
-    //         {
-    //             _id: ObjectId(req.params.id)
-    //         },
-    //         {
-    //             $set: { status: req.body.update }
-    //         }
-    //     )
-    //         .then((result) => {
-    //             res.send(result.modifiedCount > 0)
-    //         })
-
-    // })
 
 
     app.post('/addReview', (req, res) => {    //for data create
@@ -169,7 +152,7 @@ client.connect(err => {
     //make admin
     app.post('/makeAdmin', (req, res) => {
         const user = req.body;
-        console.log(user);
+        // console.log(user);
         adminCollection.insertOne(user)
             .then(result => {
                 res.send(result.insertedCount > 0)
@@ -180,7 +163,7 @@ client.connect(err => {
         const email = req.body.email;
         adminCollection.find({ email: email })
             .toArray((err, admins) => {
-                console.log("admin check", admins)
+                // console.log("admin check", admins)
                 res.send(admins.length > 0)
             })
     })
